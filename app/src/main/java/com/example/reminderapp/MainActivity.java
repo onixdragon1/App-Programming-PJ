@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -59,7 +58,6 @@ public class MainActivity extends AppCompatActivity{
         String[] result = {"2017,03,18","2017,04,18","2017,05,18","2017,06,18"};
 
         new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
-
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
@@ -75,7 +73,6 @@ public class MainActivity extends AppCompatActivity{
 
 
                 Log.i("shot_Day test", shot_Day + "");
-                Toast.makeText(getApplicationContext(), shot_Day, Toast.LENGTH_SHORT).show();
                 materialCalendarView.clearSelection();
                 showList.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
 
@@ -84,36 +81,6 @@ public class MainActivity extends AppCompatActivity{
                 FragmentTransaction fragmentTransaction  = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.listOfSchedule,  Fragment_scheduleList.newInstance(shot_Day));
                 fragmentTransaction.commit();
-
-
-                /*View popupView = getLayoutInflater().inflate(R.layout.manage_schedule, null);
-                mPopupWindow = new PopupWindow(popupView, LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                //popupView 에서 (LinearLayout 을 사용) 레이아웃이 둘러싸고 있는 컨텐츠의 크기 만큼 팝업 크기를 지정
-
-                mPopupWindow.setFocusable(true);
-                // 외부 영역 선택히 PopUp 종료
-
-                mPopupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
-
-
-                Button cancel = (Button) popupView.findViewById(R.id.btnCancel);
-                cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), "Canceled!", Toast.LENGTH_LONG).show();
-                        mPopupWindow.dismiss();
-                    }
-                });
-
-                Button save = (Button) popupView.findViewById(R.id.btnSave);
-                save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-                Toast.makeText(getApplicationContext(), shot_Day , Toast.LENGTH_SHORT).show();*/
             }
         });
     }
@@ -133,7 +100,6 @@ public class MainActivity extends AppCompatActivity{
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
             Calendar calendar = Calendar.getInstance();
             ArrayList<CalendarDay> dates = new ArrayList<>();
 
@@ -150,20 +116,15 @@ public class MainActivity extends AppCompatActivity{
                 dates.add(day);
                 calendar.set(year,month-1,days);
             }
-
-
-
             return dates;
         }
 
         @Override
         protected void onPostExecute(@NonNull List<CalendarDay> calendarDays) {
             super.onPostExecute(calendarDays);
-
             if (isFinishing()) {
                 return;
             }
-
             materialCalendarView.addDecorator(new EventDecorator(Color.RED, calendarDays,MainActivity.this));
         }
     }
