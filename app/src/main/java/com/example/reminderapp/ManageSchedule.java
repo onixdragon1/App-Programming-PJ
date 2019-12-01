@@ -15,7 +15,6 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
     String today;
     EditText editDate, editTitle, editTime, editMemo;
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +56,11 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
 
         if (mId == -1) {
             btn2.setVisibility(View.INVISIBLE);
-
         }
     }
 
     @Override
     public void onClick(View v) {
-// TODO Auto-generated method stub
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
 
         switch (v.getId()) {

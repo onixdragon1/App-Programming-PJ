@@ -86,9 +86,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
-
         String[] Time_Result;
-
         ApiSimulator(String[] Time_Result){
             this.Time_Result = Time_Result;
         }
@@ -105,7 +103,7 @@ public class MainActivity extends AppCompatActivity{
 
             /*특정날짜 달력에 점표시해주는곳*/
             /*월은 0이 1월 년,일은 그대로*/
-            //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
+            // string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
             for(int i = 0 ; i < Time_Result.length ; i ++){
                 CalendarDay day = CalendarDay.from(calendar);
                 String[] time = Time_Result[i].split(",");
