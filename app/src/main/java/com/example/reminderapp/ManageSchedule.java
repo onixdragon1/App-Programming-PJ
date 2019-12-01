@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Java Class which is managing schedule.
@@ -80,12 +81,14 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                             + editTime.getText().toString() + "', memo='"
                             + editMemo.getText().toString() + "' WHERE _id='" + mId
                             + "';");
+                    Toast.makeText(getApplicationContext(), "일정이 갱신되었습니다!", Toast.LENGTH_LONG).show();
                 } else {
                     db.execSQL("INSERT INTO today VALUES(null, '"
                             + editTitle.getText().toString() + "', '"
                             + editDate.getText().toString() + "', '"
                             + editTime.getText().toString() + "', '"
                             + editMemo.getText().toString() + "');");
+                    Toast.makeText(getApplicationContext(), "일정이 추가되었습니다!", Toast.LENGTH_LONG).show();
                 }
                 mDBHelper.close();
                 setResult(RESULT_OK);
@@ -93,6 +96,7 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
             case R.id.btnDelete:
                 if (mId != -1) {
                     db.execSQL("DELETE FROM today WHERE _id='" + mId + "';");
+                    Toast.makeText(getApplicationContext(), "일정이 삭제되었습니다!", Toast.LENGTH_LONG).show();
                     mDBHelper.close();
                 }
                 setResult(RESULT_OK);
