@@ -17,6 +17,14 @@ import androidx.fragment.app.Fragment;
 
 import static android.app.Activity.RESULT_OK;
 
+/**
+ * Java Class which is managing fragment area
+ * This fragment area shows current list of schedule on that day
+ * @date 2019.12.01
+ * @author Shin Juwon (github profile name : onixdragon1)
+ * @version 1.0
+ */
+
 public class Fragment_scheduleList extends Fragment {
     ManageDB mDBHelper;
     Cursor cursor;
@@ -28,11 +36,6 @@ public class Fragment_scheduleList extends Fragment {
 
     // 기본 생성자
     public Fragment_scheduleList() {}
-
-    /*public interface OnFragmentButtonClickedListener{
-        public void onButtonClicked(String date);
-    }*/
-    //private OnFragmentButtonClickedListener btnListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,7 +102,6 @@ public class Fragment_scheduleList extends Fragment {
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case 0:
             case 1:

@@ -9,6 +9,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+/**
+ * Java Class which is managing schedule.
+ * It has 3 function (Save, Delete, cancel)
+ * But it can conduct basic Select, Insert, Update, Delete (SIUD!)
+ * @date 2019.12.01
+ * @author Shin Juwon (github profile name : onixdragon1)
+ * @version 1.0
+ */
+
 public class ManageSchedule extends Activity implements View.OnClickListener {
     ManageDB mDBHelper;
     int mId;
@@ -35,8 +44,7 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
             editDate.setText(today);
         } else {
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
-            Cursor cursor = db.rawQuery("SELECT * FROM today WHERE _id='" + mId
-                    + "'", null);
+            Cursor cursor = db.rawQuery("SELECT * FROM today WHERE _id='" + mId + "'", null);
 
             if (cursor.moveToNext()) {
                 editTitle.setText(cursor.getString(1));

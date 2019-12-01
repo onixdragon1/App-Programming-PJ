@@ -26,6 +26,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+/**
+ * Java Class which affects all of other Java Class
+ * These codes may be disorderly at some point of view........
+ * @date 2019.12.01
+ * @author Shin Juwon (github profile name : onixdragon1)
+ * @version 1.0
+ */
+
 public class MainActivity extends AppCompatActivity{
 
     String time,kcal,menu;
