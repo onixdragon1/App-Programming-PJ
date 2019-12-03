@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
@@ -18,12 +19,24 @@ import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/*
+호출하고자 하는 액티비티의 메서드를 public 이나 protected 접근자로 설정하고 액티비티의 context를 저장한 스택틱 멤버를 추가합니다.
+---
+public static Context mContext; (호출하고자 하는 액티비티 클래스 내에 추가)
+onCreate() {
+    ...
+    mContext = this;
+    ...
+}
+-----
+그리고 접근할 때는 ((액티비티 클래스명)액티비티.mContext).메서드(...); 형식으로 접근 가능합니다.
+*/
+
 public class AlarmReceiver extends BroadcastReceiver {
-    ManageSchedule ms;
+    private ManageSchedule ms;
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         Intent notificationIntent = new Intent(context, MainActivity.class);
 
@@ -60,10 +73,9 @@ public class AlarmReceiver extends BroadcastReceiver {
         builder.setAutoCancel(true)
                 .setDefaults(NotificationCompat.DEFAULT_ALL)
                 .setWhen(System.currentTimeMillis())
-
                 .setTicker("{Time to watch some cool stuff!}")
-                .setContentTitle(ms.editTitle.getText().toString())
-                .setContentText(ms.editMemo.getText().toString())
+                .setContentTitle(((ManageSchedule)ManageSchedule.MSActivity).getEditTitle())
+                .setContentText(((ManageSchedule)ManageSchedule.MSActivity).getEditMemo())
                 .setContentInfo("INFO")
                 .setContentIntent(pendingI);
 
@@ -73,6 +85,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             notificationManager.notify(1234, builder.build());
 
             Calendar nextNotifyTime = Calendar.getInstance();
+            Log.i("시간",nextNotifyTime+"");
 
             // 내일 같은 시간으로 알람시간 결정
             nextNotifyTime.add(Calendar.DATE, 1);
@@ -83,6 +96,7 @@ public class AlarmReceiver extends BroadcastReceiver {
             editor.apply();
 
             Date currentDateTime = nextNotifyTime.getTime();
+            Log.i("CurTime", currentDateTime+"");
             String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
             Toast.makeText(context.getApplicationContext(),"다음 알람은 " + date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
         }

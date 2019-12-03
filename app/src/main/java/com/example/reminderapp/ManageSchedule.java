@@ -22,7 +22,6 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 
 /**
@@ -42,12 +41,14 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
     EditText editDate, editTitle, editMemo;
     TimePicker picker;
     int hour, min;
-
+    public static Context MSActivity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_schedule);
+
+        MSActivity = this;
 
         editDate = (EditText) findViewById(R.id.inputDate);
         editTitle = (EditText) findViewById(R.id.inputTitle);
@@ -66,9 +67,10 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
             SQLiteDatabase db = mDBHelper.getWritableDatabase();
             Cursor cursor = db.rawQuery("SELECT * FROM today WHERE _id='" + mId + "'", null);
             String dateTime_hour = "", dateTime_min = "";
-
+            String title_schedule="", memo_schedule="";
             if (cursor.moveToNext()) {
-                editTitle.setText(cursor.getString(1));
+                title_schedule = cursor.getString(1);
+                editTitle.setText(title_schedule);
                 editDate.setText(cursor.getString(2));
                 String timeGet = cursor.getString(3);
                 dateTime_hour = timeGet.split(":")[0];
@@ -82,7 +84,8 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                     picker.setCurrentHour(Integer.parseInt(dateTime_hour));
                     picker.setCurrentMinute(Integer.parseInt(dateTime_min));
                 }
-                editMemo.setText(cursor.getString(4));
+                memo_schedule = cursor.getString(4);
+                editMemo.setText(memo_schedule);
             }
             mDBHelper.close();
         }
@@ -99,9 +102,19 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
         }
     }
 
+    public String getEditMemo() {
+        return editMemo.getText().toString();
+    }
+
+    public String getEditTitle() {
+        return editTitle.getText().toString();
+    }
+
     @Override
     public void onClick(View v) {
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
+
+        picker.setIs24HourView(true);
 
         switch (v.getId()) {
             case R.id.btnSave:
@@ -122,11 +135,8 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                             + editMemo.getText().toString() + "' WHERE _id='" + mId
                             + "';");
                     /* timepicker를 통해 정해진 시간에 알람을 설정하는 부분 */
-                    picker.setIs24HourView(true);
-
-                    SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
+                    /*SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
                     long millis = sharedPreferences.getLong("nextNotifyTime", Calendar.getInstance().getTimeInMillis());
-
                     Calendar nextNotifyTime = new GregorianCalendar();
                     nextNotifyTime.setTimeInMillis(millis);
 
@@ -139,16 +149,16 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                     SimpleDateFormat MinuteFormat = new SimpleDateFormat("mm", Locale.getDefault());
 
                     int pre_hour = Integer.parseInt(HourFormat.format(currentTime));
-                    int pre_minute = Integer.parseInt(MinuteFormat.format(currentTime));
+                    int pre_minute = Integer.parseInt(MinuteFormat.format(currentTime));*/
 
                     if (Build.VERSION.SDK_INT >= 23 ){
-                        picker.setHour(pre_hour);
-                        picker.setMinute(pre_minute);
+                        picker.setHour(hour);
+                        picker.setMinute(min);
+                    } else {
+                        picker.setCurrentHour(hour);
+                        picker.setCurrentMinute(min);
                     }
-                    else{
-                        picker.setCurrentHour(pre_hour);
-                        picker.setCurrentMinute(pre_minute);
-                    }
+
                     String alarm_time = picker.getCurrentHour() + ":" + picker.getCurrentMinute();
 
                     int this_hour, hour_24, this_min;
@@ -156,17 +166,14 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                     if (Build.VERSION.SDK_INT >= 23 ){
                         hour_24 = picker.getHour();
                         this_min = picker.getMinute();
-                    }
-                    else{
+                    } else {
                         hour_24 = picker.getCurrentHour();
                         this_min = picker.getCurrentMinute();
                     }
                     if(hour_24 > 12) {
                         am_pm = "PM";
                         this_hour = hour_24 - 12;
-                    }
-                    else
-                    {
+                    } else {
                         this_hour = hour_24;
                         am_pm="AM";
                     }
@@ -184,7 +191,7 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                     }
 
                     Date currentDateTime = calendar.getTime();
-                    date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
+                    String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
                     Toast.makeText(getApplicationContext(),date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
 
                     // Preference에 설정한 값 저장
@@ -210,17 +217,19 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                             + hour+"" + ":" + min+"" + "', '"
                             + editMemo.getText().toString() + "');");
                     /* timepicker를 통해 정해진 시간에 알람을 설정하는 부분 */
-                    picker.setIs24HourView(true);
-
-                    SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
+                    /*SharedPreferences sharedPreferences = getSharedPreferences("daily alarm", MODE_PRIVATE);
                     long millis = sharedPreferences.getLong("nextNotifyTime", Calendar.getInstance().getTimeInMillis());
-
+                    Log.i("sharedPref", sharedPreferences+"");
+                    Log.i("calendar component", Calendar.getInstance().getTimeInMillis()+"");
+                    Log.i("time", millis+"");
                     Calendar nextNotifyTime = new GregorianCalendar();
                     nextNotifyTime.setTimeInMillis(millis);
 
                     Date nextDate = nextNotifyTime.getTime();
                     String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(nextDate);
                     Toast.makeText(getApplicationContext(),"[처음 실행시] 다음 알람은 " + date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
+
+                    Log.i("this_date", nextDate+"");
 
                     Date currentTime = nextNotifyTime.getTime();
                     SimpleDateFormat HourFormat = new SimpleDateFormat("kk", Locale.getDefault());
@@ -229,13 +238,17 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                     int pre_hour = Integer.parseInt(HourFormat.format(currentTime));
                     int pre_minute = Integer.parseInt(MinuteFormat.format(currentTime));
 
+                    Log.i("this_hour", pre_hour+"시");
+                    Log.i("this_minute", pre_minute+"분");*/
+
                     if (Build.VERSION.SDK_INT >= 23 ){
-                        picker.setHour(pre_hour);
-                        picker.setMinute(pre_minute);
+                        picker.setHour(hour);
+                        picker.setMinute(min);
                     } else {
-                        picker.setCurrentHour(pre_hour);
-                        picker.setCurrentMinute(pre_minute);
+                        picker.setCurrentHour(hour);
+                        picker.setCurrentMinute(min);
                     }
+
                     String alarm_time = picker.getCurrentHour() + ":" + picker.getCurrentMinute();
 
                     int this_hour, hour_24, this_min;
@@ -269,12 +282,14 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
                     }
 
                     Date currentDateTime = calendar.getTime();
-                    date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
+                    Log.i("this_time", currentDateTime+"");
+                    String date_text = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일 a hh시 mm분 ", Locale.getDefault()).format(currentDateTime);
                     Toast.makeText(getApplicationContext(),date_text + "으로 알람이 설정되었습니다!", Toast.LENGTH_SHORT).show();
 
                     // Preference에 설정한 값 저장
                     SharedPreferences.Editor editor = getSharedPreferences("daily alarm", MODE_PRIVATE).edit();
                     editor.putLong("nextNotifyTime", (long)calendar.getTimeInMillis());
+                    Log.i("AlarmTime", calendar.getTimeInMillis()+"");
                     editor.apply();
 
                     diaryNotification(calendar);
