@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity{
     Cursor cursor;
     MaterialCalendarView materialCalendarView;
     LinearLayout showList;
-    // private PopupWindow mPopupWindow ;
+    // private PopupWindow mPopupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_calendar);
 
         materialCalendarView = (MaterialCalendarView)findViewById(R.id.calendarView);
-        showList = (LinearLayout)findViewById(R.id.listOfSchedule) ;
+        showList = (LinearLayout)findViewById(R.id.listOfSchedule);
 
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity{
 
         String[] result = {"2017,03,18","2017,04,18","2017,05,18","2017,06,18"};
 
+        // 싱글 스레드 작업
+        // 백그라운드에서 이벤트 동작과 현재 시간을 체크하여 날짜가 바뀔 시 Decorator 이벤트 적용
         new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -73,12 +75,7 @@ public class MainActivity extends AppCompatActivity{
                 int Month = date.getMonth() + 1;
                 int Day = date.getDay();
 
-                Log.i("Year test", Year + "");
-                Log.i("Month test", Month + "");
-                Log.i("Day test", Day + "");
-
                 String shot_Day = Year + "/" + Month + "/" + Day;
-
 
                 Log.i("shot_Day test", shot_Day + "");
                 materialCalendarView.clearSelection();
@@ -93,6 +90,9 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
+    // ApiSimulator라는 MainActivity 내부 클래스를 선언하여 싱글 스레드 비동기작업을 수행할 수 있는
+    // 메서드와 리소스를 받아와서 시간별로 Background에서 시간을 체크해주고
+    // addDecorator를 사용하여 토요일, 일요일, 오늘 날짜, 클릭 이벤트 등을 받아와 수행할 수 있도록 받아온다
     private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
         String[] Time_Result;
         ApiSimulator(String[] Time_Result){

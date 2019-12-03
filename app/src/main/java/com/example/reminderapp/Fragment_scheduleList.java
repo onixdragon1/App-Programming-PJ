@@ -57,8 +57,8 @@ public class Fragment_scheduleList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.show_listofschedule, container, false);
 
-        addBtn = (Button)view.findViewById(R.id.btnadd);
-        dateTextView = (TextView)view.findViewById(R.id.texttoday);
+        addBtn = (Button)view.findViewById(R.id.btnScheduleAdd);
+        dateTextView = (TextView)view.findViewById(R.id.todaySchedule);
         dateTextView.setText(curDate);
 
         mDBHelper = new ManageDB(getActivity(), "Today.db", null, 1);
@@ -69,14 +69,14 @@ public class Fragment_scheduleList extends Fragment {
 
         // getActivity().getApplicationContext()를 원래는 Intent 호출을 통해 this 객체로 받았지만,
         // 여기는 fragment이기 때문에 먼저 액티비티를 받아와서(getActivity() 메서드)
-        // 여기에서 실행할 것이다(getApplicationContext() 메서드)라고 사용해준다.
+        // 받아온 액티비티에서 실행할 것이다(getApplicationContext() 메서드)라고 사용해준다.
         // 여타 메서드들도 그렇게 사용한다.
         adapter = new SimpleCursorAdapter(getActivity().getApplicationContext(),
                 android.R.layout.simple_list_item_2, cursor, new String[] {
                 "title", "time" }, new int[] { android.R.id.text1,
                 android.R.id.text2 });
 
-        list = (ListView)view.findViewById(R.id.list1);
+        list = (ListView)view.findViewById(R.id.scheduleList);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

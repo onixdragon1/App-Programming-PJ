@@ -17,7 +17,7 @@
             android:text="제목" />
 
         <EditText
-            android:id="@+id/edittitle"
+            android:id="@+id/inputTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center" />
@@ -29,7 +29,7 @@
             android:text="날짜" />
 
         <EditText
-            android:id="@+id/editdate"
+            android:id="@+id/inputDate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -41,12 +41,11 @@
             android:gravity="center"
             android:text="시간" />
 
-        <EditText
-            android:id="@+id/edittime"
-            android:layout_width="fill_parent"
+        <TimePicker
+            android:id="@+id/timePicker"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="00:00" />
+            android:timePickerMode="spinner"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -55,7 +54,7 @@
             android:text="메모" />
 
         <EditText
-            android:id="@+id/editmemo"
+            android:id="@+id/inputMemo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:gravity="center" />
