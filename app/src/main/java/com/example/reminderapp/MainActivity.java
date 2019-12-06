@@ -1,15 +1,18 @@
 package com.example.reminderapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -18,6 +21,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.reminderapp.decorators.EventDecorator;
@@ -54,6 +58,7 @@ public class MainActivity extends AppCompatActivity{
     TextView dateTextView;
     String shot_Day;
     int popupLayout_Width, popupLayout_Height;
+    com.prolificinteractive.materialcalendarview.MaterialCalendarView mainLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +85,7 @@ public class MainActivity extends AppCompatActivity{
         // 백그라운드에서 이벤트 동작과 현재 시간을 체크하여 날짜가 바뀔 시 Decorator 이벤트 적용
         new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
                 int Year = date.getYear();
@@ -99,8 +105,8 @@ public class MainActivity extends AppCompatActivity{
 
                 // 날짜 클릭 시 popupWindow를 이용해 일정 관리 영역을 달력 위에 오버래핑하여 띄워줌
                 DisplayMetrics metric = getApplicationContext().getResources().getDisplayMetrics();
-                popupLayout_Width = (int)(metric.widthPixels*0.75);
-                popupLayout_Height = (int)(metric.heightPixels*0.7);
+                popupLayout_Width = (int)(metric.widthPixels*0.65);
+                popupLayout_Height = (int)(metric.heightPixels*0.6);
 
                 View popupView = getLayoutInflater().inflate(R.layout.show_listofschedule, null);
                 popupWindow = new PopupWindow(popupView, popupLayout_Width, popupLayout_Height);
@@ -108,6 +114,14 @@ public class MainActivity extends AppCompatActivity{
                 popupWindow.setFocusable(true);
                 // 외부 영역 선택 시 PopUp 종료
                 popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
+                View container = (View) popupWindow.getContentView().getParent();
+                WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+                WindowManager.LayoutParams p = (WindowManager.LayoutParams) container.getLayoutParams();
+                // add flag
+                p.flags |= WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                p.dimAmount = 0.5f;
+                wm.updateViewLayout(container, p);
 
                 addBtn = (Button)popupView.findViewById(R.id.btnScheduleAdd);
                 dateTextView = (TextView)popupView.findViewById(R.id.todaySchedule);
