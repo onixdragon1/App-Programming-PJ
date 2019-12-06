@@ -1,16 +1,24 @@
 package com.example.reminderapp;
 
+import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.widget.LinearLayout;
+import android.view.Gravity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.SimpleCursorAdapter;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.reminderapp.decorators.EventDecorator;
 import com.example.reminderapp.decorators.OneDayDecorator;
@@ -35,13 +43,17 @@ import java.util.concurrent.Executors;
  */
 
 public class MainActivity extends AppCompatActivity{
-
-    String time,kcal,menu;
     private final OneDayDecorator oneDayDecorator = new OneDayDecorator();
     Cursor cursor;
     MaterialCalendarView materialCalendarView;
-    LinearLayout showList;
-    // private PopupWindow mPopupWindow;
+    private PopupWindow popupWindow;
+    ManageDB mDBHelper;
+    SimpleCursorAdapter adapter;
+    ListView list;
+    Button addBtn;
+    TextView dateTextView;
+    String shot_Day;
+    int popupLayout_Width, popupLayout_Height;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +61,6 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_calendar);
 
         materialCalendarView = (MaterialCalendarView)findViewById(R.id.calendarView);
-        showList = (LinearLayout)findViewById(R.id.listOfSchedule);
 
         materialCalendarView.state().edit()
                 .setFirstDayOfWeek(Calendar.SUNDAY)
@@ -75,19 +86,88 @@ public class MainActivity extends AppCompatActivity{
                 int Month = date.getMonth() + 1;
                 int Day = date.getDay();
 
-                String shot_Day = Year + "/" + Month + "/" + Day;
+                shot_Day = Year + "/" + Month + "/" + Day;
 
                 Log.i("shot_Day test", shot_Day + "");
                 materialCalendarView.clearSelection();
-                showList.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f));
 
                 // 날짜 클릭 시 fragment를 이용해 일정 관리 영역을 달력 아래 띄워줌
-                FragmentManager fragmentManager = getSupportFragmentManager();
+                /*FragmentManager fragmentManager = getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction  = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.listOfSchedule,  Fragment_scheduleList.newInstance(shot_Day));
-                fragmentTransaction.commit();
+                fragmentTransaction.commit();*/
+
+                // 날짜 클릭 시 popupWindow를 이용해 일정 관리 영역을 달력 위에 오버래핑하여 띄워줌
+                DisplayMetrics metric = getApplicationContext().getResources().getDisplayMetrics();
+                popupLayout_Width = (int)(metric.widthPixels*0.75);
+                popupLayout_Height = (int)(metric.heightPixels*0.7);
+
+                View popupView = getLayoutInflater().inflate(R.layout.show_listofschedule, null);
+                popupWindow = new PopupWindow(popupView, popupLayout_Width, popupLayout_Height);
+
+                popupWindow.setFocusable(true);
+                // 외부 영역 선택 시 PopUp 종료
+                popupWindow.showAtLocation(popupView, Gravity.CENTER, 0, 0);
+
+                addBtn = (Button)popupView.findViewById(R.id.btnScheduleAdd);
+                dateTextView = (TextView)popupView.findViewById(R.id.todaySchedule);
+                dateTextView.setText(shot_Day);
+
+                mDBHelper = new ManageDB(getApplicationContext(), "Today.db", null, 1);
+                SQLiteDatabase db = mDBHelper.getWritableDatabase();
+
+                cursor = db.rawQuery(
+                        "SELECT * FROM today WHERE date = '" + shot_Day + "'", null);
+
+                // getActivity().getApplicationContext()를 원래는 Intent 호출을 통해 this 객체로 받았지만,
+                // 여기는 fragment이기 때문에 먼저 액티비티를 받아와서(getActivity() 메서드)
+                // 받아온 액티비티에서 실행할 것이다(getApplicationContext() 메서드)라고 사용해준다.
+                // 여타 메서드들도 그렇게 사용한다.
+                adapter = new SimpleCursorAdapter(getApplicationContext(),
+                        android.R.layout.simple_list_item_2, cursor, new String[] {
+                        "title", "time" }, new int[] { android.R.id.text1,
+                        android.R.id.text2 });
+
+                list = (ListView)popupView.findViewById(R.id.scheduleList);
+                list.setAdapter(adapter);
+                list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(getApplicationContext(), ManageSchedule.class);
+                        cursor.moveToPosition(position);
+                        intent.putExtra("ScheduleID", cursor.getInt(0));
+                        startActivityForResult(intent, 0);
+                    }
+                });
+
+                mDBHelper.close();
+
+                addBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), ManageSchedule.class);
+                        intent.putExtra("ScheduleDate", shot_Day);
+                        startActivityForResult(intent, 1);
+                    }
+                });
             }
         });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        switch (requestCode) {
+            case 0:
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    // adapter.notifyDataSetChanged();
+                    SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                    cursor = db.rawQuery("SELECT * FROM today WHERE date = '"
+                            + shot_Day + "'", null);
+                    adapter.changeCursor(cursor);
+                    mDBHelper.close();
+                }
+                break;
+        }
     }
 
     // ApiSimulator라는 MainActivity 내부 클래스를 선언하여 싱글 스레드 비동기작업을 수행할 수 있는

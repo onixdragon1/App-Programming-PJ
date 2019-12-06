@@ -18,6 +18,13 @@ import java.util.Objects;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Java Class which acts where some device rebooted.
+ * @date 2019.12.04
+ * @author Shin Juwon (github profile name : onixdragon1)
+ * @version 1.0
+ */
+
 public class DeviceBootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {

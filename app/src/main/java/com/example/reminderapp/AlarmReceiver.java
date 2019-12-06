@@ -1,5 +1,6 @@
 package com.example.reminderapp;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,6 +20,14 @@ import java.util.Locale;
 
 import static android.content.Context.MODE_PRIVATE;
 
+/**
+ * Java Class which affects on Alarm Function.
+ * It may be non-efficient code...
+ * @date 2019.12.04
+ * @author Shin Juwon (github profile name : onixdragon1)
+ * @version 1.0
+ */
+
 /*
 호출하고자 하는 액티비티의 메서드를 public 이나 protected 접근자로 설정하고 액티비티의 context를 저장한 스택틱 멤버를 추가합니다.
 ---
@@ -33,7 +42,6 @@ onCreate() {
 */
 
 public class AlarmReceiver extends BroadcastReceiver {
-    private ManageSchedule ms;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -76,6 +84,7 @@ public class AlarmReceiver extends BroadcastReceiver {
                 .setTicker("{Time to watch some cool stuff!}")
                 .setContentTitle(((ManageSchedule)ManageSchedule.MSActivity).getEditTitle())
                 .setContentText(((ManageSchedule)ManageSchedule.MSActivity).getEditMemo())
+                .setDefaults(Notification.DEFAULT_SOUND)
                 .setContentInfo("INFO")
                 .setContentIntent(pendingI);
 

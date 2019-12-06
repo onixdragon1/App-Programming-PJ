@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<!-- 현재는 테스트용 코드로, 좌우 사이즈는 350, 상하 사이즈는 550 -->
+<androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#ffffff">
+    android:id="@+id/cardview"
+    android:layout_width="350dp"
+    android:layout_height="550dp"
+    android:layout_marginLeft="18.3dp"
+    android:layout_marginRight="18.7dp"
+    android:layout_marginTop="11dp"
+    app:cardCornerRadius = "10dp"
+    android:layout_margin="10dp"
+    android:layout_gravity="center">
 
     <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:orientation="horizontal"
-        android:id="@+id/ScheduleManageLabel">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="#ffffff">
 
         <TextView
             android:id="@+id/todaySchedule"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="일정 관리" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical" >
+            <ListView
+                android:id="@+id/scheduleList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"/>
 
-        <ListView
-            android:id="@+id/scheduleList"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:orientation="horizontal" >
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnScheduleAdd"
@@ -48,5 +48,4 @@
             android:text="일정 추가" />
 
     </LinearLayout>
-
-</LinearLayout>
+</androidx.cardview.widget.CardView>

@@ -56,8 +56,10 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
         picker = (TimePicker)findViewById(R.id.timePicker);
 
         Intent intent = getIntent();
-        mId = intent.getIntExtra("ParamID", -1);
-        today = intent.getStringExtra("ParamDate");
+        mId = intent.getIntExtra("ScheduleID", -1);
+        Log.i("date", mId+"");
+        today = intent.getStringExtra("ScheduleDate");
+        Log.i("time", today+"");
 
         mDBHelper = new ManageDB(getApplicationContext(), "Today.db", null, 1);
 
@@ -113,7 +115,6 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         SQLiteDatabase db = mDBHelper.getWritableDatabase();
-
         picker.setIs24HourView(true);
 
         switch (v.getId()) {

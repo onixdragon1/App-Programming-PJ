@@ -12,8 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:mcv_selectionColor="#fc9a96"
-        app:mcv_showOtherDates="defaults"
-        android:background="#9999"/>
+        app:mcv_showOtherDates="defaults" />
 
     <LinearLayout
         android:layout_width="match_parent"
