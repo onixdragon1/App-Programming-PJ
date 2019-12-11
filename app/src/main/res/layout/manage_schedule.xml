@@ -2,93 +2,105 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:theme="@style/editEtLine">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp">
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="제목" />
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="30dp"
+            android:src="@drawable/bellicon"/>
 
         <EditText
             android:id="@+id/inputTitle"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="날짜" />
+            android:drawableLeft="@drawable/iconmonstr_text_1_24"
+            android:drawablePadding="9dp"
+            android:layout_marginBottom="30dp"
+            android:textSize="25dp"
+            android:hint="제목"/>
 
         <EditText
             android:id="@+id/inputDate"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="2011/5/20" />
+            android:drawableLeft="@drawable/iconmonstr_calendar_4_24"
+            android:drawablePadding="9dp"
+            android:layout_marginBottom="15dp"
+            android:hint="현재 날짜 표시"/>
 
-        <TextView
+        <EditText
+            android:id="@+id/inputTime"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="시간" />
+            android:drawableLeft="@drawable/iconmonstr_time_9_24"
+            android:drawablePadding="9dp"
+            android:layout_marginBottom="15dp"
+            android:hint="선택한 시간 표시"/>
 
         <TimePicker
             android:id="@+id/timePicker"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:timePickerMode="spinner"
-            android:layout_gravity="center"/>
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="메모" />
+            android:layout_gravity="center"
+            android:layout_marginBottom="15dp"/>
 
         <EditText
             android:id="@+id/inputMemo"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center" />
+            android:drawableLeft="@drawable/iconmonstr_note_14_24"
+            android:drawablePadding="9dp"
+            android:layout_marginBottom="30dp"
+            android:hint="메모"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/btnadd"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:orientation="horizontal" >
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/btnadd"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="저장" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="삭제" />
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="저장"
+                android:textColor="#4184ff"
+                android:background="@drawable/button"/>
 
-        <Button
-            android:id="@+id/btnCancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="취소" />
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="삭제"
+                android:textColor="#4184ff"
+                android:background="@drawable/button"/>
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="취소"
+                android:textColor="#4184ff"
+                android:background="@drawable/button"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

@@ -2,17 +2,20 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:gravity="center_vertical">
+    android:layout_gravity="center_vertical">
 
     <com.prolificinteractive.materialcalendarview.MaterialCalendarView
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:mcv_selectionColor="#fc9a96"
-        app:mcv_showOtherDates="defaults" />
+        app:mcv_selectionColor="#4184ff"
+        app:mcv_showOtherDates="defaults"
+        app:mcv_headerTextAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:mcv_weekDayTextAppearance="@style/TextAppearance.AppCompat.Medium"
+        app:mcv_dateTextAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <LinearLayout
         android:layout_width="match_parent"

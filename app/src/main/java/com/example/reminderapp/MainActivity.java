@@ -60,6 +60,9 @@ public class MainActivity extends AppCompatActivity{
     int popupLayout_Width, popupLayout_Height;
     com.prolificinteractive.materialcalendarview.MaterialCalendarView mainLayout;
 
+    Button button;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -225,7 +228,7 @@ public class MainActivity extends AppCompatActivity{
             if (isFinishing()) {
                 return;
             }
-            materialCalendarView.addDecorator(new EventDecorator(Color.RED, calendarDays,MainActivity.this));
+            materialCalendarView.addDecorator(new EventDecorator(Color.rgb(65, 132, 255), calendarDays,MainActivity.this));
         }
     }
 }

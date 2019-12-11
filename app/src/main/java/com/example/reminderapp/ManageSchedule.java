@@ -13,9 +13,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,11 +44,40 @@ public class ManageSchedule extends Activity implements View.OnClickListener {
     TimePicker picker;
     int hour, min;
     public static Context MSActivity;
+    EditText intime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.manage_schedule);
+
+        intime = (EditText)findViewById(R.id.inputTime);
+        intime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                PopupMenu popup = new PopupMenu(getApplicationContext(), intime);
+                popup.getMenuInflater().inflate(R.menu.time_menu, popup.getMenu());
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch( item.getItemId() ){
+                            case R.id.hour:
+                                intime.setText("현재 시간");
+                                break;
+                            case R.id.none:
+                                intime.setText("알림 없음");
+                                break;
+                            case R.id.pick:
+                                intime.setText("TimePicker 뜨기");
+                                break;
+                        }
+                        return false;
+                    }
+                });
+                popup.show();
+            }
+        });
 
         MSActivity = this;
 
